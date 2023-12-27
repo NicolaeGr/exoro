@@ -6,9 +6,9 @@ import { getCustomerTokenMutation } from '$utils/queries';
 import { client } from '$utils/shopify.js';
 
 export const load: PageServerLoad = (event) => {
-	return {
-		user: event.locals.user
-	};
+	if (!event.locals.user) {
+		redirect(302, 'dashboard');
+	}
 };
 
 /** @type {import('./$types').Actions} */

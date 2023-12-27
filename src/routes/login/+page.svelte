@@ -4,15 +4,6 @@
 	export let form: ActionData;
 </script>
 
-{#if form?.success}
-	<!-- this message is ephemeral; it exists because the page was rendered in
-		   response to a form submission. it will vanish if the user reloads -->
-	<p>
-		Successfully logged in! Welcome back,
-		{JSON.stringify(data.user)}
-	</p>
-{/if}
-
 <div class="container relative mx-auto grid h-screen w-[90%] max-w-xl items-center">
 	<form method="POST" action="?/login" class=" mb-16 flex flex-col">
 		<h1 class="text-4xl">Welcome Back</h1>
