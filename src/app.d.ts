@@ -7,7 +7,7 @@ declare global {
 			user: any;
 			profiles: [any];
 		}
-		// interface PageData {}
+		interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
 	}

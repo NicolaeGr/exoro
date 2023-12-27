@@ -1,8 +1,11 @@
+import type { PageServerLoad } from './$types';
+
 import { error, type NumericRange } from '@sveltejs/kit';
+
 import { client } from '$utils/shopify';
 import { profileQuery } from '$utils/queries';
 
-export async function load({ params }) {
+export const load: PageServerLoad = async ({ params }) => {
 	const { data, errors, extensions } = await client.request(profileQuery, {
 		variables: { profile_id: params.profile_id }
 	});
@@ -13,4 +16,4 @@ export async function load({ params }) {
 	} else {
 		throw error(errors?.networkStatusCode as NumericRange<400, 599>);
 	}
-}
+};

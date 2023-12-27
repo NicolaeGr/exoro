@@ -1,14 +1,9 @@
 <script lang="ts">
-	/** @type {import('./$types').PageData} */
-	export let data;
+	import type { PageData } from './$types';
 
-	const profiles = data.profiles as [ProfileType];
+	export let data: PageData;
 
-	type ProfileType = {
-		[key: string]: {
-			value: any;
-		};
-	};
+	const profiles = data.profiles;
 </script>
 
 <h1>Hello! Let's take a look at our latest profiles</h1>

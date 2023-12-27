@@ -1,6 +1,7 @@
 <script lang="ts">
-	/** @type {import('./$types').PageData} */
-	export let data;
+	import type { PageData } from './$types';
+
+	export let data: PageData;
 
 	type ProfileType = {
 		[key: string]: {

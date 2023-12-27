@@ -1,9 +1,7 @@
-<script>
-	/** @type {import('./$types').PageData} */
-	export let data;
+<script lang="ts">
+	import type { ActionData } from './$types';
 
-	/** @type {import('./$types').ActionData} */
-	export let form;
+	export let form: ActionData;
 </script>
 
 {#if form?.success}

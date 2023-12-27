@@ -1,14 +1,15 @@
+import type { PageServerLoad } from './$types';
+
 import { fail, redirect } from '@sveltejs/kit';
 
 import { getCustomerTokenMutation } from '$utils/queries';
 import { client } from '$utils/shopify.js';
 
-/** @type {import('./$types').PageServerLoad} */
-export function load(event) {
+export const load: PageServerLoad = (event) => {
 	return {
 		user: event.locals.user
 	};
-}
+};
 
 /** @type {import('./$types').Actions} */
 export const actions = {
