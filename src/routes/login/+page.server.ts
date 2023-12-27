@@ -1,4 +1,4 @@
-import type { PageServerLoad } from './$types';
+import type { PageServerLoad, Actions } from './$types';
 
 import { fail, redirect } from '@sveltejs/kit';
 
@@ -11,8 +11,7 @@ export const load: PageServerLoad = (event) => {
 	}
 };
 
-/** @type {import('./$types').Actions} */
-export const actions = {
+export const actions: Actions = {
 	login: async ({ cookies, request, url }) => {
 		const data = await request.formData();
 		const email = data.get('email');
