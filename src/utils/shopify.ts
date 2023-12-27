@@ -1,3 +1,4 @@
+const endpoint = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN;
 const publicKey = import.meta.env.VITE_SHOPIFY_STOREFRONT_API_TOKEN;
 
 import '@shopify/shopify-api/adapters/node';
@@ -10,7 +11,7 @@ const intermediateFetch = async (url: URL | RequestInfo, init?: RequestInit): Pr
 };
 
 export const client = createStorefrontApiClient({
-	storeDomain: 'd8fb57.myshopify.com',
+	storeDomain: endpoint,
 	apiVersion: '2023-10',
 	publicAccessToken: publicKey,
 	customFetchApi: intermediateFetch
