@@ -60,3 +60,44 @@ export const getCustomerTokenMutation = /* GraphQL */ `
 	}
 `;
 
+export const getCustomerDataQuery = /* GraphQL */ `
+	query GetUserData($customerAccessToken: String!) {
+		customer(customerAccessToken: $customerAccessToken) {
+			createdAt
+			id
+			email
+			displayName
+			firstName
+			lastName
+			profiles: metafields(identifiers: { namespace: "card", key: "profile" }) {
+				reference {
+					... on Metaobject {
+						handle
+					}
+				}
+			}
+			orders(first: 10) {
+				pageInfo {
+					hasNextPage
+					hasPreviousPage
+					startCursor
+				}
+				nodes {
+					id
+					financialStatus
+					lineItems(first: 50) {
+						nodes {
+							currentQuantity
+							quantity
+							title
+							variant {
+								id
+								title
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+`;
