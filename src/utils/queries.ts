@@ -30,3 +30,16 @@ export const profileListQuery = /* GraphQL */ `
 		}
 	}
 `;
+
+export const profileQuery = /* GraphQL */ `
+	query GetProfieByID($profile_id: String!) {
+		metaobject(handle: { handle: $profile_id, type: "profile" }) {
+			id
+			fields {
+				key
+				type
+				value
+			}
+		}
+	}
+`;
