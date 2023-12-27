@@ -43,3 +43,20 @@ export const profileQuery = /* GraphQL */ `
 		}
 	}
 `;
+
+export const getCustomerTokenMutation = /* GraphQL */ `
+	mutation GetCustomerToken($input: CustomerAccessTokenCreateInput!) {
+		customerAccessTokenCreate(input: $input) {
+			customerAccessToken {
+				accessToken
+				expiresAt
+			}
+			customerUserErrors {
+				code
+				message
+				field
+			}
+		}
+	}
+`;
+
