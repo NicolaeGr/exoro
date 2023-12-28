@@ -60,6 +60,21 @@ export const getCustomerTokenMutation = /* GraphQL */ `
 	}
 `;
 
+export const renewCustomerTokenMutation = /* GraphQL */ `
+	mutation renewCustomerToken($customerAccessToken: String!) {
+		customerAccessTokenRenew(customerAccessToken: $customerAccessToken) {
+			customerAccessToken {
+				accessToken
+				expiresAt
+			}
+			userErrors {
+				field
+				message
+			}
+		}
+	}
+`;
+
 export const getCustomerDataQuery = /* GraphQL */ `
 	query GetUserData($customerAccessToken: String!) {
 		customer(customerAccessToken: $customerAccessToken) {

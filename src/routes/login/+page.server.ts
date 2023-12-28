@@ -6,16 +6,16 @@ import { getCustomerTokenMutation } from '$utils/queries';
 import { client } from '$utils/shopify.js';
 
 export const load: PageServerLoad = (event) => {
-	if (!event.locals.user) {
+	if (event.locals.user) {
 		redirect(302, 'dashboard');
 	}
 };
 
 export const actions: Actions = {
 	login: async ({ cookies, request, url }) => {
-		const data = await request.formData();
-		const email = data.get('email');
-		const password = data.get('password');
+		const formData = await request.formData();
+		const email = formData.get('email');
+		const password = formData.get('password');
 
 		if (!email) {
 			return fail(400, { email, mail_missing: true });
@@ -24,11 +24,7 @@ export const actions: Actions = {
 			return fail(400, { email, password_missing: true });
 		}
 
-		const {
-			data: queryData,
-			errors,
-			extensions
-		} = await client.request(getCustomerTokenMutation, {
+		const { data, errors, extensions } = await client.request(getCustomerTokenMutation, {
 			variables: {
 				input: {
 					email,
@@ -43,14 +39,14 @@ export const actions: Actions = {
 			return { email, error: true };
 		}
 
-		if (!queryData?.customerAccessTokenCreate?.customerAccessToken) {
-			const userErrors = queryData?.customerAccessTokenCreate?.customerUserErrors;
+		if (!data?.customerAccessTokenCreate?.customerAccessToken) {
+			const userErrors = data?.customerAccessTokenCreate?.customerUserErrors;
 			console.log(userErrors);
 
 			return { email, incorrect: true };
 		}
 
-		const { accessToken, expiresAt } = queryData?.customerAccessTokenCreate?.customerAccessToken;
+		const { accessToken, expiresAt } = data?.customerAccessTokenCreate?.customerAccessToken;
 
 		cookies.set('userToken', accessToken, {
 			path: '/',
