@@ -3,7 +3,7 @@ import type { PageServerLoad } from './$types';
 import { error, type NumericRange } from '@sveltejs/kit';
 
 import { client } from '$utils/shopify';
-import { profileQuery } from '$utils/queries';
+import { profileQuery } from '$utils/queries.storefront';
 
 export const load: PageServerLoad = async ({ params }) => {
 	const { data, errors, extensions } = await client.request(profileQuery, {

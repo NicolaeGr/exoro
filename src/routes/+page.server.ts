@@ -9,7 +9,7 @@ type ProfileType = {
 import { error, type NumericRange } from '@sveltejs/kit';
 
 import { client } from '$utils/shopify.js';
-import { profileListQuery } from '$utils/queries.js';
+import { profileListQuery } from '$utils/queries.storefront.js';
 
 export const load: PageServerLoad = async ({ url }) => {
 	const { data, errors, extensions } = await client.request(profileListQuery);

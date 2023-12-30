@@ -2,7 +2,7 @@ import type { PageServerLoad, Actions } from './$types';
 
 import { fail, redirect } from '@sveltejs/kit';
 
-import { getCustomerTokenMutation } from '$utils/queries';
+import { getCustomerTokenMutation } from '$utils/queries.storefront';
 import { client } from '$utils/shopify.js';
 
 export const load: PageServerLoad = (event) => {

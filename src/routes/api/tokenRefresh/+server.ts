@@ -1,7 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 
 import { client } from '$utils/shopify';
-import { renewCustomerTokenMutation } from '$utils/queries';
+import { renewCustomerTokenMutation } from '$utils/queries.storefront';
 
 const refreshAccessToken = async (
 	token: string
