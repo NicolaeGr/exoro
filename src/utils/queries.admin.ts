@@ -58,23 +58,13 @@ export const getCustomerCardsByIdQuery = /* GraphQL */ `
 
 export const updateCustomerCardsMutation = /* GraphQL */ `
 	mutation UpdateCustomerMetafields($customer_id: ID!, $cards: String!) {
-		customerUpdate(
-			input: {
-				id: $customer_id
-				metafields: { namespace: "customer", key: "cards", value: $cards }
-			}
+		metafieldsSet(
+			metafields: { namespace: "customer", key: "cards", ownerId: $customer_id, value: $cards }
 		) {
-			customer {
+			metafields {
 				id
-				cards: metafield(namespace: "customer", key: "cards") {
-					id
-					key
-					value
-				}
-			}
-			userErrors {
-				message
-				field
+				key
+				value
 			}
 		}
 	}

@@ -14,17 +14,20 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 	const cardIds = [];
 
 	for (const item of resBody.line_items) {
-		const cardCreationResponse = await admin.request(createCardMetaobjectMutation, {
-			variables: {
-				order_id: `${resBody.id}`,
-				product_type: `gid://shopify/Product/${item.product_id}`,
-				product_variant: `gid://shopify/ProductVariant/${item.variant_id}`
-			}
-		});
+		for (let i = 0; i < item.quantity; i++) {
+			const cardCreationResponse = await admin.request(createCardMetaobjectMutation, {
+				variables: {
+					order_id: `${resBody.id}`,
+					product_type: `gid://shopify/Product/${item.product_id}`,
+					product_variant: `gid://shopify/ProductVariant/${item.variant_id}`
+				}
+			});
 
-		const cardMetaobject = cardCreationResponse.data.metaobjectCreate.metaobject;
+			const cardMetaobject = cardCreationResponse.data.metaobjectCreate.metaobject;
 
-		cardIds.push(cardMetaobject.id);
+			cardIds.push(cardMetaobject.id);
+			console.log(cardIds);
+		}
 	}
 
 	const customerCardsResponse = await admin.request(getCustomerCardsByIdQuery, {
@@ -34,13 +37,18 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 	});
 
 	if (!customerCardsResponse.data) {
-		admin.request(deleteCustomerCardMutation, { variables: { card_id: cardIds } });
+		console.log(JSON.stringify(customerCardsResponse, null, 2));
+		for (const cardId of cardIds) {
+			admin.request(deleteCustomerCardMutation, { variables: { card_id: cardId } });
+		}
+		return new Response();
 	}
 
 	const customerCardsData = customerCardsResponse.data.customer;
-	const customerCards = (customerCardsData.cards as Array<any>) || [];
+	const customerCards = (JSON.parse(customerCardsData.cards.value) as Array<String>) || [];
 
 	customerCards.push(...cardIds);
+	console.log('Final:', customerCards);
 
 	const customerCardsUpdateResponse = await admin.request(updateCustomerCardsMutation, {
 		variables: {
@@ -50,7 +58,11 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 	});
 
 	if (!customerCardsUpdateResponse.data) {
-		admin.request(deleteCustomerCardMutation, { variables: { card_id: cardIds } });
+		console.log(JSON.stringify(customerCardsUpdateResponse, null, 2));
+		for (const cardId of cardIds) {
+			admin.request(deleteCustomerCardMutation, { variables: { card_id: cardId } });
+		}
+		return new Response();
 	}
 
 	return new Response();
