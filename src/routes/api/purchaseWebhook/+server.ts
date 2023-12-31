@@ -35,7 +35,7 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 
 		if (!card.data) {
 			console.log(JSON.stringify(card, null, 2));
-			return new Response();
+			continue;
 		}
 
 		const cardData = card.data.metaobject;
