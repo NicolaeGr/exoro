@@ -4,12 +4,59 @@ import { admin } from '$utils/shopify';
 import {
 	createCardMetaobjectMutation,
 	deleteCustomerCardMutation,
+	getCardMetaobjectQuery,
 	getCustomerCardsByIdQuery,
 	updateCustomerCardsMutation
 } from '$utils/queries.admin';
 
 export const POST: RequestHandler = async (event: RequestEvent) => {
 	const resBody = await event.request.json();
+
+	const customerCardsResponse = await admin.request(getCustomerCardsByIdQuery, {
+		variables: {
+			customer_id: `gid://shopify/Customer/${resBody.customer.id}`
+		}
+	});
+
+	if (!customerCardsResponse.data) {
+		console.log(JSON.stringify(customerCardsResponse, null, 2));
+
+		return new Response();
+	}
+
+	const customerCards = JSON.parse(customerCardsResponse.data.customer.cards.value) || [];
+
+	for (const cardId of customerCards) {
+		const card = await admin.request(getCardMetaobjectQuery, {
+			variables: {
+				card_id: cardId
+			}
+		});
+
+		if (!card.data) {
+			console.log(JSON.stringify(card, null, 2));
+			return new Response();
+		}
+
+		const cardData = card.data.metaobject;
+		const cardOrder = parseInt(cardData.order_id.value);
+		const cardProductType = parseInt(cardData.type.value.split('/')[4]);
+		const cardProductVariant = parseInt(cardData.variant.value.split('/')[4]);
+
+		if (cardOrder === resBody.id) {
+			for (const item of resBody.line_items) {
+				if (item.product_id === cardProductType && item.variant_id === cardProductVariant) {
+					if (item.quantity === 1) {
+						const index = resBody.line_items.indexOf(item);
+						resBody.line_items.splice(index, 1);
+					} else {
+						item.quantity--;
+					}
+					break;
+				}
+			}
+		}
+	}
 
 	const cardIds = [];
 
@@ -30,12 +77,6 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 		}
 	}
 
-	const customerCardsResponse = await admin.request(getCustomerCardsByIdQuery, {
-		variables: {
-			customer_id: `gid://shopify/Customer/${resBody.customer.id}`
-		}
-	});
-
 	if (!customerCardsResponse.data) {
 		console.log(JSON.stringify(customerCardsResponse, null, 2));
 		for (const cardId of cardIds) {
@@ -43,9 +84,6 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 		}
 		return new Response();
 	}
-
-	const customerCardsData = customerCardsResponse.data.customer;
-	const customerCards = (JSON.parse(customerCardsData.cards.value) as Array<String>) || [];
 
 	customerCards.push(...cardIds);
 	console.log('Final:', customerCards);
@@ -64,6 +102,8 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 		}
 		return new Response();
 	}
+
+	console.log('Done');
 
 	return new Response();
 };

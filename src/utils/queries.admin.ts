@@ -42,8 +42,8 @@ export const createCardMetaobjectMutation = /* GraphQL */ `
 `;
 
 export const getCustomerCardsByIdQuery = /* GraphQL */ `
-	query GetCustomerMetafields($customer_id: ID!) {
-		customer(id: $customer_id) {
+	query GetCustomerMetafields($customer_id_id: ID!) {
+		customer(id: $customer_id_id) {
 			id
 			firstName
 			lastName
@@ -78,6 +78,27 @@ export const deleteCustomerCardMutation = /* GraphQL */ `
 				code
 				field
 				message
+			}
+		}
+	}
+`;
+
+export const getCardMetaobjectQuery = /* GraphQL */ `
+	query GetCardMetaobject($card_id: ID!) {
+		metaobject(id: $card_id) {
+			id
+			handle
+			order_id: field(key: "order_id") {
+				value
+			}
+			profile: field(key: "profile") {
+				value
+			}
+			type: field(key: "type") {
+				value
+			}
+			variant: field(key: "variant") {
+				value
 			}
 		}
 	}
