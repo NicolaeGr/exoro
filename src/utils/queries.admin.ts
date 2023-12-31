@@ -42,8 +42,8 @@ export const createCardMetaobjectMutation = /* GraphQL */ `
 `;
 
 export const getCustomerCardsByIdQuery = /* GraphQL */ `
-	query GetCustomerMetafields($customer_id_id: ID!) {
-		customer(id: $customer_id_id) {
+	query GetCustomerMetafields($customer_id: ID!) {
+		customer(id: $customer_id) {
 			id
 			firstName
 			lastName
