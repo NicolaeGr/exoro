@@ -5,10 +5,10 @@ import { fail, redirect } from '@sveltejs/kit';
 import { getCustomerTokenMutation } from '$utils/queries.storefront';
 import { client } from '$utils/shopify.js';
 
-export const load: PageServerLoad = (event) => {
-	if (event.locals.user) {
-		redirect(302, 'dashboard');
-	}
+export const load: PageServerLoad = async ({ locals }) => {
+	const user = await locals.getSession();
+
+	if (user) redirect(302, '/dashboard');
 };
 
 export const actions: Actions = {
@@ -69,7 +69,7 @@ export const actions: Actions = {
 			redirect(303, redirectUrl);
 		}
 
-		redirect(303, 'dashboard');
+		redirect(303, '/dashboard');
 
 		return { success: true };
 	}

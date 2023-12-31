@@ -12,6 +12,3 @@
 <pre>
 {JSON.stringify(data.user, null, '\t')}
 </pre>
-<br /><br />
-
-<!-- {JSON.stringify(data.profile)} -->

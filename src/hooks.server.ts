@@ -5,14 +5,32 @@ import type { Handle } from '@sveltejs/kit';
 import { getCustomerDataQuery } from '$utils/queries.storefront';
 import { client, admin } from '$utils/shopify';
 
-export const handle: Handle = async ({ event, resolve }) => {
-	const { data } = await client.request(getCustomerDataQuery, {
+const getSession = async (token: string): Promise<any | null> => {
+	const { data, errors, extensions } = await client.request(getCustomerDataQuery, {
 		variables: {
-			customerAccessToken: event.cookies.get('userToken')
+			customerAccessToken: token
 		}
 	});
 
-	if (data) event.locals.user = data.customer;
+	if (errors || extensions) {
+		console.log(errors, extensions);
+		return null;
+	}
+
+	if (!data?.customer) {
+		const userErrors = data?.customerAccessTokenCreate?.userErrors;
+		console.log(userErrors);
+
+		return null;
+	}
+
+	return data.customer;
+};
+
+export const handle: Handle = async ({ event, resolve }) => {
+	event.locals.getSession = () => {
+		return getSession(event.cookies.get('userToken') || '');
+	};
 
 	return resolve(event);
 };
@@ -47,5 +65,3 @@ const orderPaidWebHook = await admin.request(reqQuery, {
 		callbackUrl: `${hostUrl}/api/purchaseWebhook`
 	}
 });
-
-// console.log(JSON.stringify(orderPaidWebHook, null, 2));
