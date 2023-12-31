@@ -73,7 +73,6 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 			const cardMetaobject = cardCreationResponse.data.metaobjectCreate.metaobject;
 
 			cardIds.push(cardMetaobject.id);
-			console.log(cardIds);
 		}
 	}
 
@@ -86,7 +85,6 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 	}
 
 	customerCards.push(...cardIds);
-	console.log('Final:', customerCards);
 
 	const customerCardsUpdateResponse = await admin.request(updateCustomerCardsMutation, {
 		variables: {
