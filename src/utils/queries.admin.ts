@@ -1,5 +1,5 @@
 export const createCardMetaobjectMutation = /* GraphQL */ `
-	mutation createCardMetaobject(
+	mutation CreateCardMetaobject(
 		$order_id: String!
 		$product_type: String!
 		$product_variant: String!
@@ -41,8 +41,8 @@ export const createCardMetaobjectMutation = /* GraphQL */ `
 	}
 `;
 
-export const getCustomerCardsByIdQuery = /* GraphQL */ `
-	query GetCustomerMetafields($customer_id: ID!) {
+export const getCustomerCardsMetafieldByIdQuery = /* GraphQL */ `
+	query GetCustomerCardsMetafieldById($customer_id: ID!) {
 		customer(id: $customer_id) {
 			id
 			firstName
@@ -56,8 +56,8 @@ export const getCustomerCardsByIdQuery = /* GraphQL */ `
 	}
 `;
 
-export const updateCustomerCardsMutation = /* GraphQL */ `
-	mutation UpdateCustomerMetafields($customer_id: ID!, $cards: String!) {
+export const updateCustomerCardsMetafieldMutation = /* GraphQL */ `
+	mutation UpdateCustomerCardsMetafield($customer_id: ID!, $cards: String!) {
 		metafieldsSet(
 			metafields: { namespace: "customer", key: "cards", ownerId: $customer_id, value: $cards }
 		) {
@@ -70,12 +70,14 @@ export const updateCustomerCardsMutation = /* GraphQL */ `
 	}
 `;
 
-export const deleteCustomerCardMutation = /* GraphQL */ `
-	mutation DeleteCustomerCard($card_id: ID!) {
-		metafieldDelete(input: { id: $card_id }) {
+export const deleteCardMetaobjectByCustomerIdMutation = /* GraphQL */ `
+	mutation DeleteCardMetaobjectByCustomerId($card_id: ID!) {
+		metaobjectDelete(id: $card_id) {
 			deletedId
 			userErrors {
 				code
+				elementIndex
+				elementKey
 				field
 				message
 			}
@@ -98,6 +100,36 @@ export const getCardMetaobjectQuery = /* GraphQL */ `
 				value
 			}
 			variant: field(key: "variant") {
+				value
+			}
+		}
+	}
+`;
+
+export const getProfilesMetafieldByCustomerIdQuery = /* GraphQL */ `
+	query GetProfilesMetafieldByCustomerId($customer_id: ID!) {
+		customer(id: $customer_id) {
+			id
+			firstName
+			lastName
+			profiles: metafield(namespace: "customer", key: "profiles") {
+				id
+				key
+				value
+			}
+		}
+	}
+`;
+
+export const getLinksMetafieldByCustomerIdQuery = /* GraphQL */ `
+	query GetLinksMetafieldByCustomerId($customer_id: ID!) {
+		customer(id: $customer_id) {
+			id
+			firstName
+			lastName
+			links: metafield(namespace: "customer", key: "links") {
+				id
+				key
 				value
 			}
 		}

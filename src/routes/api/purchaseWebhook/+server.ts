@@ -3,16 +3,16 @@ import type { RequestHandler, RequestEvent } from '@sveltejs/kit';
 import { admin } from '$utils/shopify';
 import {
 	createCardMetaobjectMutation,
-	deleteCustomerCardMutation,
+	deleteCardMetaobjectByCustomerIdMutation,
 	getCardMetaobjectQuery,
-	getCustomerCardsByIdQuery,
-	updateCustomerCardsMutation
+	getCustomerCardsMetafieldByIdQuery,
+	updateCustomerCardsMetafieldMutation
 } from '$utils/queries.admin';
 
 export const POST: RequestHandler = async (event: RequestEvent) => {
 	const resBody = await event.request.json();
 
-	const customerCardsResponse = await admin.request(getCustomerCardsByIdQuery, {
+	const customerCardsResponse = await admin.request(getCustomerCardsMetafieldByIdQuery, {
 		variables: {
 			customer_id: `gid://shopify/Customer/${resBody.customer.id}`
 		}
@@ -79,14 +79,14 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 	if (!customerCardsResponse.data) {
 		console.log(JSON.stringify(customerCardsResponse, null, 2));
 		for (const cardId of cardIds) {
-			admin.request(deleteCustomerCardMutation, { variables: { card_id: cardId } });
+			admin.request(deleteCardMetaobjectByCustomerIdMutation, { variables: { card_id: cardId } });
 		}
 		return new Response();
 	}
 
 	customerCards.push(...cardIds);
 
-	const customerCardsUpdateResponse = await admin.request(updateCustomerCardsMutation, {
+	const customerCardsUpdateResponse = await admin.request(updateCustomerCardsMetafieldMutation, {
 		variables: {
 			customer_id: `gid://shopify/Customer/${resBody.customer.id}`,
 			cards: JSON.stringify(customerCards)
@@ -96,12 +96,10 @@ export const POST: RequestHandler = async (event: RequestEvent) => {
 	if (!customerCardsUpdateResponse.data) {
 		console.log(JSON.stringify(customerCardsUpdateResponse, null, 2));
 		for (const cardId of cardIds) {
-			admin.request(deleteCustomerCardMutation, { variables: { card_id: cardId } });
+			admin.request(deleteCardMetaobjectByCustomerIdMutation, { variables: { card_id: cardId } });
 		}
 		return new Response();
 	}
-
-	console.log('Done');
 
 	return new Response();
 };
