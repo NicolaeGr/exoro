@@ -15,4 +15,6 @@
 <a href="/" class="text-blue-500">Back Home</a>
 <br />
 
-{JSON.stringify(profile)}
+<span class="overflow-auto">
+	{JSON.stringify(profile, null, 2)}
+</span>
