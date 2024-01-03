@@ -18,9 +18,6 @@ const getSession = async (token: string): Promise<any | null> => {
 	}
 
 	if (!data?.customer) {
-		const userErrors = data?.customerAccessTokenCreate?.userErrors;
-		console.log(userErrors);
-
 		return null;
 	}
 
