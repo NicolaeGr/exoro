@@ -26,13 +26,8 @@ export const load: LayoutServerLoad = async ({ locals }) => {
 		})
 	]);
 
-	if (!profilesResponse.data || !linksResponse.data) {
-		console.log(JSON.stringify(profilesResponse, null, 2));
-		console.log(JSON.stringify(linksResponse, null, 2));
-	}
-
-	const profiles = JSON.parse(profilesResponse.data.customer.profiles?.value || '[]');
-	const links = JSON.parse(linksResponse.data.customer.links?.value || '[]');
+	const profiles = JSON.parse(profilesResponse.data.customer?.profiles?.value || '[]');
+	const links = JSON.parse(linksResponse.data.customer?.links?.value || '[]');
 
 	resultData.profiles = profiles;
 	resultData.links = links;
