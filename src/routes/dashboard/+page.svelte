@@ -9,9 +9,9 @@
 <br /><br />
 <hr />
 <br />
-<pre>
-{JSON.stringify(data.user, null, '\t')}
-</pre>
+<span>
+	{JSON.stringify(data.user, null, '\t')}
+</span>
 
 <br /><br />
 

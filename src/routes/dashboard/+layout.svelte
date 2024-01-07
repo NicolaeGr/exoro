@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import SideBar from '$components/nav/SideBar.svelte';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
@@ -13,11 +14,15 @@
 		});
 		invalidateAll();
 	};
+
+	let isSidebarOpen = true;
 </script>
 
-<header class="flex w-screen justify-between overflow-x-clip bg-slate-400">
-	<p>Successfully logged in! Welcome back, {data.user.firstName}!</p>
+<div class="flex h-screen w-screen overflow-clip">
+	<SideBar bind:isSidebarOpen />
+	<div class=" w-full bg-green-100">
+		<header class="w-full bg-blue-100">Welcome back, {data.user.firstName}!</header>
 
-	<button on:click={logout}>Log Out</button>
-</header>
-<slot />
+		<slot />
+	</div>
+</div>
