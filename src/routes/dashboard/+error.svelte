@@ -1,4 +1,5 @@
 <script>
+	import { goto } from '$app/navigation';
 	import { SearchIcon } from 'svelte-feather-icons';
 </script>
 
@@ -12,11 +13,14 @@
 			<div class="text-lg font-medium">Opps! The page you're looking for doesn't exist.</div>
 		</div>
 		<a
-			href="/"
+			href="/dashboard"
+			on:click={() => {
+				goto('/dashboard');
+			}}
 			data-sveltekit-prefetch
 			class="w-full bg-white/90 p-3 text-center text-sm font-medium uppercase text-black hover:bg-white/100"
 		>
-			Return to Home Page
+			Return Home
 		</a>
 	</div>
 </div>
