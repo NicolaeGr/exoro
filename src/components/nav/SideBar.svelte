@@ -5,7 +5,15 @@
 	import { page } from '$app/stores';
 
 	import { twMerge } from 'tailwind-merge';
-	import { HomeIcon, CompassIcon, SettingsIcon, LogOutIcon } from 'svelte-feather-icons';
+	import {
+		SidebarIcon,
+		HomeIcon,
+		UserPlusIcon,
+		UsersIcon,
+		CompassIcon,
+		SettingsIcon,
+		LogOutIcon
+	} from 'svelte-feather-icons';
 
 	export let isSidebarOpen = true;
 
@@ -23,27 +31,19 @@
 			icon: HomeIcon
 		},
 		{
+			name: 'New Profile',
+			path: '/dashboard/profiles/new',
+			icon: UserPlusIcon
+		},
+		{
+			name: 'My Profiles',
+			path: '/dashboard/profiles',
+			icon: UsersIcon
+		},
+		{
 			name: 'Templates',
 			path: '/dashboard/templates',
 			icon: CompassIcon
-		},
-		{
-			name: 'Settings',
-			path: '/dashboard/settings',
-			icon: SettingsIcon
-		},
-		{
-			name: 'Logout',
-			action: async () => {
-				const response = await fetch('/api/logout', {
-					method: 'POST',
-					headers: {
-						'content-type': 'application/json'
-					}
-				});
-				invalidateAll();
-			},
-			icon: LogOutIcon
 		}
 	];
 
@@ -67,34 +67,87 @@
 		activeLink = link;
 	};
 
+	const unselectLink = () => {
+		activeLink = null;
+	};
+
+	const logout = async () => {
+		const response = await fetch('/api/logout', {
+			method: 'POST',
+			headers: {
+				'content-type': 'application/json'
+			}
+		});
+		invalidateAll();
+	};
+
 	$: assideStyle = twMerge(
 		'flex  min-w-[40px] flex-col justify-between transition-all',
 		isSidebarOpen ? 'w-[280px]' : 'p-2 w-[50px]',
-		isSidebarOpen ? 'p-4 pb-2' : 'p-1'
+		isSidebarOpen ? 'p-4' : 'p-1 pt-4 pb-4'
 	);
 </script>
 
 <aside class={assideStyle}>
-	<div>
-		<button type="button" on:click={() => (isSidebarOpen = !isSidebarOpen)}>E</button>
+	<div class="flex h-10 justify-between" class:self-center={!isSidebarOpen}>
+		{#if isSidebarOpen}
+			<div class="h-10 w-10 rounded-lg bg-slate-200" />
+		{/if}
+		<button class="text-gray-600" type="button" on:click={() => (isSidebarOpen = !isSidebarOpen)}>
+			<SidebarIcon size="1.5x" strokeWidth={2} />
+		</button>
 	</div>
-	<nav class="flex flex-col gap-1">
+
+	<nav class="flex flex-col gap-1" class:self-center={!isSidebarOpen}>
 		{#each links as link}
 			<button
-				class="flex w-full items-center space-x-2 rounded p-1 hover:bg-gray-100"
+				class="flex items-center space-x-0.5 rounded p-1"
 				class:bg-blue-200={activeLink === link}
+				class:hover:bg-gray-100={activeLink !== link}
 				class:hover:bg-blue-300={activeLink === link}
+				class:w-max={!isSidebarOpen}
+				class:w-full={isSidebarOpen}
 				on:click={() => handleLinkClick(link)}
 				type="button"
 			>
-				<span class="flex h-8 w-8 items-center justify-center">
-					<svelte:component this={link.icon} size="1.2x" />
+				<span class="flex h-6 w-6 items-center justify-center">
+					<svelte:component this={link.icon} size="1.0x" />
 				</span>
 				{#if isSidebarOpen}
-					<span>{link.name}</span>
+					<span class="text-sm">{link.name}</span>
 				{/if}
 			</button>
 		{/each}
 	</nav>
-	<div>.</div>
+
+	<div class:self-center={!isSidebarOpen}>
+		<!-- settings and log out like links but without colored background and big padding -->
+		<button
+			class="flex w-full items-center space-x-0.5 rounded p-1 transition-all hover:text-gray-500"
+			on:click={() => {
+				goto('/dashboard/settings');
+				unselectLink();
+			}}
+			type="button"
+		>
+			<span class="flex h-6 w-6 items-center justify-center">
+				<svelte:component this={SettingsIcon} size="1x" />
+			</span>
+			{#if isSidebarOpen}
+				<span>Settings</span>
+			{/if}
+		</button>
+		<button
+			class="flex w-full items-center space-x-0.5 rounded p-1 transition-all hover:text-gray-500"
+			on:click={() => logout()}
+			type="button"
+		>
+			<span class="flex h-6 w-6 items-center justify-center">
+				<svelte:component this={LogOutIcon} size="1x" />
+			</span>
+			{#if isSidebarOpen}
+				<span>Logout</span>
+			{/if}
+		</button>
+	</div>
 </aside>
