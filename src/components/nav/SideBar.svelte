@@ -76,8 +76,8 @@
 	};
 
 	$: assideStyle = twMerge(
-		'flex  min-w-[40px] flex-col justify-between transition-all bg-slate-100',
-		isSidebarOpen ? 'w-[280px]' : 'p-2 w-[50px]',
+		'flex flex-col justify-between transition-all bg-slate-100',
+		isSidebarOpen ? 'w-[280px] min-w-[200px]' : 'p-2 w-[50px] min-w-[50px]',
 		isSidebarOpen ? 'p-4' : 'p-1 pt-4 pb-4'
 	);
 </script>

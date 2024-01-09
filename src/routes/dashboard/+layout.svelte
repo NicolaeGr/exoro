@@ -18,9 +18,9 @@
 	let isSidebarOpen = true;
 </script>
 
-<div class="flex h-screen w-screen overflow-clip">
+<div class="flex h-screen w-screen overflow-hidden">
 	<SideBar bind:isSidebarOpen />
-	<div class=" w-full">
+	<div class="min-w-[calc(100dvw-50px)] sm:min-w-full">
 		<header class="w-full bg-blue-100">Welcome back, {data.user.firstName}!</header>
 
 		<slot />
