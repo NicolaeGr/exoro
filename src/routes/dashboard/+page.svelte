@@ -18,3 +18,5 @@
 <span>Profiles: {JSON.stringify(data.profiles)}</span>
 <br />
 <span>Links: {JSON.stringify(data.links)}</span>
+<br />
+<span>Cards: {JSON.stringify(data.cards)}</span>
