@@ -20,7 +20,7 @@
 
 <div class="flex h-screen w-screen overflow-clip">
 	<SideBar bind:isSidebarOpen />
-	<div class=" w-full bg-green-100">
+	<div class=" w-full">
 		<header class="w-full bg-blue-100">Welcome back, {data.user.firstName}!</header>
 
 		<slot />
