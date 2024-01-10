@@ -4,19 +4,21 @@
 	export let data: PageData;
 </script>
 
-<a href="/" class="text-blue-600">Go Home</a>
+<main>
+	<a href="/" class="text-blue-600">Go Home</a>
 
-<br /><br />
-<hr />
-<br />
-<span>
-	{JSON.stringify(data.user, null, '\t')}
-</span>
+	<br /><br />
+	<hr />
+	<br />
+	<span>
+		{JSON.stringify(data.user, null, '\t')}
+	</span>
 
-<br /><br />
+	<br /><br />
 
-<span>Profiles: {JSON.stringify(data.profiles)}</span>
-<br />
-<span>Links: {JSON.stringify(data.links)}</span>
-<br />
-<span>Cards: {JSON.stringify(data.cards)}</span>
+	<span>Profiles: {JSON.stringify(data.profileIds)}</span>
+	<br />
+	<span>Links: {JSON.stringify(data.linkIds)}</span>
+	<br />
+	<span>Cards: {JSON.stringify(data.cardIds)}</span>
+</main>
