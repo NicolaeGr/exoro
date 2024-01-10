@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 
 	import { goto, invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { navigating, page } from '$app/stores';
 
 	import { twMerge } from 'tailwind-merge';
 	import {
@@ -15,7 +15,7 @@
 		LogOutIcon
 	} from 'svelte-feather-icons';
 
-	export let isSidebarOpen = true;
+	export let isSidebarOpen: boolean;
 
 	type Link = {
 		name: string;
@@ -52,6 +52,10 @@
 	onMount(() => {
 		activeLink = links.find((link) => link.path === $page.url.pathname);
 	});
+
+	$: if ($navigating) {
+		activeLink = links.find((link) => link.path === $page.url.pathname);
+	}
 
 	const handleLinkClick = (link: any) => {
 		if (link.path) {
